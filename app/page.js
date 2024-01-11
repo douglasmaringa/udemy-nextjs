@@ -1,12 +1,19 @@
 import React from 'react'
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import Category from './components/Category';
 import Card from './components/Card';
 import Banner from './components/Banner';
+import { currentUser } from '@clerk/nextjs';
+import { getProducts } from '@/sanity/product-util';
 
+export default async function Home() {
+  const user = await currentUser();
+ 
+  if (!user) return <div>Not logged in</div>;
+  const email = user?.emailAddresses[0]?.emailAddress;
 
-function Home() {
+  const products = await getProducts();
+  
   return (
     <div>
        <Header/>
@@ -27,12 +34,11 @@ function Home() {
 
       <div className='flex p-10'>
       <div className='mx-auto grid grid-cols-1 lg:grid-cols-3 gap-16'>
-          <Card/>
-          <Card/>
-          <Card/>
-          <Card/>
-          <Card/>
-          <Card/>
+        {
+          products.map((product)=>(
+            <Card key={product._id} product={product}/>
+          ))
+        }
       </div>
       </div>
 
@@ -42,4 +48,3 @@ function Home() {
   )
 }
 
-export default Home

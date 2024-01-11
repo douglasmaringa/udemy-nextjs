@@ -1,13 +1,14 @@
-import React from 'react';
+import { useUser } from '@clerk/nextjs';
+import { getOrdersByEmail } from '@/sanity/order-util';
+import { currentUser } from '@clerk/nextjs';
 
-function Order() {
-  const products = [
-    { id: 1, name: 'Product 1', quantity: 2, paid: 29.99,status:'Delivered' },
-    { id: 2, name: 'Product 2', quantity: 1, paid: 19.99 ,status:'Shipping'},
-    // Add more products as needed
-  ];
+export default async function Order() {
+  const user = await currentUser();
+ 
+  if (!user) return <div>Not logged in</div>;
 
-  
+  const fetchedOrders = await getOrdersByEmail(user?.emailAddresses[0]?.emailAddress);
+
   return (
     <div className='max-w-3xl mx-auto mt-20'>
       <h1 className="text-3xl text-center font-semibold text-[#5B20B6] mb-6">Your Orders Page</h1>
@@ -17,28 +18,43 @@ function Order() {
           <tr className="text-[#5B20B6] border-b border-gray-200">
             <th className="py-2 px-4">Product</th>
             <th className="py-2 px-4">Quantity</th>
-            <th className="py-2 px-4">Paid</th>
-            <th className="py-2 px-4">Status</th>
+            <th className="py-2 px-4">Price</th>
+            <th className="py-2 px-4">Payment Status</th>
+            <th className="py-2 px-4">Delivery Status</th>
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => (
-            <tr key={product.id} className="hover:bg-gray-50 text-center border-b border-gray-300 text-[#5B20B6]">
+          {fetchedOrders.map((order) => (
+            <tr key={order._id} className="hover:bg-gray-50 text-center border-b border-gray-300 text-[#5B20B6]">
               <td className="py-2 px-4 flex items-center">
-                <img className='mr-2' src="painting.jpg" width={50} height={30} alt="art" />
-                {product.name}
+                {order.name}
+                
               </td>
-              <td className="py-2 px-4">{product.quantity}</td>
-              <td className="py-2 px-4">${product.paid}</td>
-              <td className="py-2 px-4">{product.status}</td>
+              <td className="py-2 px-4">{order.qty}</td>
+              <td className="py-2 px-4">${order.price}</td>
+              <td className="py-2 px-4">
+                {
+                  order.paid ? (
+                    <span className="text-green-500">Paid</span>
+                  ) : (
+                    <span className="text-red-500">Unpaid</span>
+                  )
+                }
+                </td>
+                <td className="py-2 px-4">
+                {
+                  order.delivered ? (
+                    <span className="text-green-500">Delivered</span>
+                  ) : (
+                    <span className="text-red-500">In transit</span>
+                  )
+                }
+                </td>
             </tr>
           ))}
         </tbody>
       </table>
-
-     
     </div>
   );
 }
 
-export default Order;

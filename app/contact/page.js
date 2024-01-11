@@ -1,15 +1,12 @@
-import Details from "../components/Details"
 import Header from "../components/Header"
+import Contact from "../components/Contact"
 
 
 function page() {
   return (
     <div>
         <Header/>
-
-        <div>
-            <Details/>
-        </div>
+        <Contact/>
     </div>
   )
 }
