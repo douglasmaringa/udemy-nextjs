@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 function Banner() {
   return (
@@ -12,8 +13,8 @@ function Banner() {
             <p className="max-w-2xl mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-400">
                From innovative gadgets to cutting-edge tech, GadgetGrove is your gateway to the future of technology. Explore Now or speak to our tech experts.
             </p>
-            <a
-              href="#"
+            <Link
+              href="/products"
               className="bg-black inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
             >
               Get started
@@ -29,7 +30,7 @@ function Banner() {
                   clipRule="evenodd"
                 ></path>
               </svg>
-            </a>
+            </Link>
             <a
               href="#"
               className="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
