@@ -7,7 +7,7 @@ function Category() {
           <img
             src="painting.jpg"
             layout="fill"
-            objectFit="cover"
+            objectfit="cover"
             alt="art"
           />
         </div>

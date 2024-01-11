@@ -10,7 +10,7 @@ function Details() {
           <img
             src="painting.jpg"
             layout="fill"
-            objectFit="cover"
+            objectfit="cover"
             alt="art"
           />
         </div>
@@ -51,7 +51,7 @@ function Details() {
             <img
               src="painting.jpg"
               layout="fill"
-              objectFit="cover"
+              objectfit="cover"
               alt="small_art1"
             />
           </li>
@@ -59,7 +59,7 @@ function Details() {
             <img
               src="painting.jpg"
               layout="fill"
-              objectFit="cover"
+              objectfit="cover"
               alt="small_art2"
             />
           </li>
