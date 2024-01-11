@@ -4,6 +4,17 @@ import React,{useState} from 'react';
 import useCartStore from "../../cartStore"
 
 function Details({product}) {
+  const [selectedImage, setSelectedImage] = useState(product?.image);
+  const [selectedColor, setSelectedColor] = useState(product?.colors[0]);
+
+  //const cart = useCartStore((state) => state.cart);
+  const addToCart = useCartStore((state) => state.addToCart);
+  const[qty,setQty] = useState(1);
+
+  const handleAddToCart = () => {
+    addToCart({ product, quantity: qty,color:selectedColor });
+  };
+
   return (
     <div className='max-w-7xl mx-auto mt-20'>
       <div className='grid grid-cols-1 lg:grid-cols-2'>
@@ -11,7 +22,7 @@ function Details({product}) {
         {/* Left - Main Image */}
         <div className="shadow-md relative h-96 overflow-hidden aspect-ratio-1">
           <img
-            src={product?.image}
+            src={selectedImage}
             layout="fill"
             objectfit="cover"
             alt="art"
@@ -28,13 +39,13 @@ function Details({product}) {
             {product?.colors?.map((color) => {
               switch (color) {
                 case 'Grey':
-                  return <div key={color} className="w-8 h-8 rounded-full bg-gray-500 cursor-pointer hover:border-4 hover:border-blue-900"></div>;
+                  return <div onClick={()=>{setSelectedColor(color)}} key={color} className={`${color == selectedColor ? "border-4 border-[#5b20b6]":""} w-8 h-8 rounded-full bg-gray-500 cursor-pointer hover:border-4 border-[#5b20b6]`}></div>;
                 case 'Black':
-                  return <div key={color} className="w-8 h-8 rounded-full bg-black cursor-pointer hover:border-4 hover:border-blue-900"></div>;
+                  return <div onClick={()=>{setSelectedColor(color)}} key={color} className={`${color == selectedColor ? "border-4 border-[#5b20b6]":""} w-8 h-8 rounded-full bg-gray-800 cursor-pointer hover:border-4 border-[#5b20b6]`}></div>;
                 case 'Blue':
-                  return <div key={color} className="w-8 h-8 rounded-full bg-blue-900 cursor-pointer hover:border-4 hover:border-blue-900"></div>;
+                  return <div onClick={()=>{setSelectedColor(color)}} key={color} className={`${color == selectedColor ? "border-4 border-[#5b20b6]":""} w-8 h-8 rounded-full bg-blue-800 cursor-pointer hover:border-4 border-[#5b20b6]`}></div>;
                 default:
-                  return <div key={color} className="w-8 h-8 rounded-full bg-gray-200 cursor-pointer hover:border-4 hover:border-blue-900"></div>;
+                  return <div onClick={()=>{setSelectedColor(color)}} key={color} className={`${color == selectedColor ? "border-4 border-[#5b20b6]":""} w-8 h-8 rounded-full bg-gray-300 cursor-pointer hover:border-4 border-[#5b20b6]`}></div>;
               }
             })}
           </div>
@@ -45,13 +56,23 @@ function Details({product}) {
             <span className="text-[#5B20B6] text-xl font-semibold">${product?.price}</span>
           </div>
 
-          <div className='mt-6 flex flex-col text-gray-500'>
-            <label className='ml-2' htmlFor="">Qty</label>
-            <input type="number" defaultValue={1} className="w-20 px-4 h-10 border border-gray-300 rounded-md" />
+          <div className="mt-6 flex flex-col text-gray-500">
+            <label className="ml-2" htmlFor="">
+              Qty
+            </label>
+            <input
+              type="number"
+              value={qty}
+              onChange={(e)=>setQty(e.target.value)}
+              className="w-20 px-4 h-10 border border-gray-300 rounded-md"
+            />
           </div>
 
-          <div className='mt-6'>
-            <button className='bg-[#5B20B6] text-white px-6 py-3 rounded-md'>Add to Cart</button>
+          
+          <div className="mt-6">
+            <button onClick={handleAddToCart} className="bg-[#5B20B6] text-white px-6 py-3 rounded-md">
+              Add to Cart
+            </button>
           </div>
 
         </div>
@@ -60,9 +81,17 @@ function Details({product}) {
       {/* Below Main Image - Small Image List */}
       <div className="mt-2">
         <ul className="flex gap-4 overflow-x-auto">
+            <li onClick={()=>{setSelectedImage(product?.image)}} className={`${selectedImage == product?.image? "border-4 border-[#5b20b6]":""} w-20 relative overflow-hidden aspect-ratio-1 cursor-pointer hover:border-4 border-[#5b20b6]`}>
+                <img
+                  src={product?.image}
+                  layout="fill"
+                  objectfit="cover"
+                  alt="small_art1"
+                />
+              </li>
           {
             product?.extraImages?.map((image)=>(
-              <li className="w-20  relative overflow-hidden aspect-ratio-1 cursor-pointer hover:border-4 hover:border-black">
+              <li onClick={()=>{setSelectedImage(image)}} className={`${selectedImage == image? "border-4 border-[#5b20b6]":""} w-20 relative overflow-hidden aspect-ratio-1 cursor-pointer hover:border-4 border-[#5b20b6]`}>
                 <img
                   src={image}
                   layout="fill"

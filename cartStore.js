@@ -5,7 +5,7 @@ const useCartStore = create((set) => ({
   cart: [],
   cartTotal: 0,
   totalItems: 0,
-  addToCart: ({ product, quantity }) =>
+  addToCart: ({ product, quantity,color }) =>
     set((state) => {
       const existingProductIndex = state.cart.findIndex((item) => item._id === product._id);
       const newQuantity = parseInt(quantity, 10);
@@ -33,7 +33,7 @@ const useCartStore = create((set) => ({
       } else {
         // If the product doesn't exist, add it to the cart with the new quantity
         return {
-          cart: [...state.cart, { ...product, quantity: newQuantity }],
+          cart: [...state.cart, { ...product, quantity: newQuantity ,color:color}],
           cartTotal: calculateCartTotal([...state.cart, { ...product, quantity: newQuantity }]),
           totalItems: calculateTotalItems([...state.cart, { ...product, quantity: newQuantity }]),
         };
