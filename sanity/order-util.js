@@ -15,8 +15,10 @@ export async function getOrdersByEmail(email) {
       // Query orders from Sanity with a GROQ query
       const orders = await client.fetch(
         `*[_type == 'order' && email == $email] | order(createdAt desc)`,
-        { email }
-      );
+        { email },
+        {next: {
+          revalidate: 1, //revalidate every 30 days
+       }});
   
       // Return the sorted orders
       return orders;
