@@ -1,6 +1,9 @@
-import React from 'react';
+"use client"
+import Image from 'next/image';
+import React,{useState} from 'react';
+import useCartStore from "../../cartStore"
 
-function Details() {
+function Details({product}) {
   return (
     <div className='max-w-7xl mx-auto mt-20'>
       <div className='grid grid-cols-1 lg:grid-cols-2'>
@@ -8,7 +11,7 @@ function Details() {
         {/* Left - Main Image */}
         <div className="shadow-md relative h-96 overflow-hidden aspect-ratio-1">
           <img
-            src="painting.jpg"
+            src={product?.image}
             layout="fill"
             objectfit="cover"
             alt="art"
@@ -17,19 +20,29 @@ function Details() {
 
         {/* Right - Details */}
         <div className="flex flex-col p-6 justify-between">
-          <h1 className="text-3xl font-semibold text-[#5B20B6]">Iphone 15</h1>
-          <p className="text-lg text-gray-500 mt-4">Iphone 15 pro max 2023 version best phone</p>
+          <h1 className="text-3xl font-semibold text-[#5B20B6]">{product?.name}</h1>
+          <p className="text-lg text-gray-500 mt-4">{product?.description}</p>
 
           {/* Color Selection Circles */}
           <div className="flex mt-6 space-x-3">
-            <div className="w-8 h-8 rounded-full bg-blue-500 cursor-pointer"></div>
-            <div className="w-8 h-8 rounded-full bg-red-500 cursor-pointer"></div>
-            <div className="w-8 h-8 rounded-full bg-green-500 cursor-pointer"></div>
+            {product?.colors?.map((color) => {
+              switch (color) {
+                case 'Grey':
+                  return <div key={color} className="w-8 h-8 rounded-full bg-gray-500 cursor-pointer hover:border-4 hover:border-blue-900"></div>;
+                case 'Black':
+                  return <div key={color} className="w-8 h-8 rounded-full bg-black cursor-pointer hover:border-4 hover:border-blue-900"></div>;
+                case 'Blue':
+                  return <div key={color} className="w-8 h-8 rounded-full bg-blue-900 cursor-pointer hover:border-4 hover:border-blue-900"></div>;
+                default:
+                  return <div key={color} className="w-8 h-8 rounded-full bg-gray-200 cursor-pointer hover:border-4 hover:border-blue-900"></div>;
+              }
+            })}
           </div>
+
 
           <div className="mt-5">
             {/* Additional details can be added here */}
-            <span className="text-[#5B20B6] text-xl font-semibold">$99.99</span>
+            <span className="text-[#5B20B6] text-xl font-semibold">${product?.price}</span>
           </div>
 
           <div className='mt-6 flex flex-col text-gray-500'>
@@ -45,25 +58,20 @@ function Details() {
       </div>
 
       {/* Below Main Image - Small Image List */}
-      <div className="mt-8">
+      <div className="mt-2">
         <ul className="flex gap-4 overflow-x-auto">
-          <li className="w-20 h-20 relative overflow-hidden aspect-ratio-1 cursor-pointer">
-            <img
-              src="painting.jpg"
-              layout="fill"
-              objectfit="cover"
-              alt="small_art1"
-            />
-          </li>
-          <li className="w-20 h-20 relative overflow-hidden aspect-ratio-1 cursor-pointer">
-            <img
-              src="painting.jpg"
-              layout="fill"
-              objectfit="cover"
-              alt="small_art2"
-            />
-          </li>
-          {/* Add more small images as needed */}
+          {
+            product?.extraImages?.map((image)=>(
+              <li className="w-20  relative overflow-hidden aspect-ratio-1 cursor-pointer hover:border-4 hover:border-black">
+                <img
+                  src={image}
+                  layout="fill"
+                  objectfit="cover"
+                  alt="small_art1"
+                />
+              </li>
+            ))
+          }
         </ul>
       </div>
     </div>
