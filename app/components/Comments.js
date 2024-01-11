@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { FaStar } from 'react-icons/fa';
 import { createComment, getCommentsByProductId } from '@/sanity/comment-util';
 import { useUser } from "@clerk/nextjs";
+import { toast } from 'react-hot-toast';
 
 function Comments({ product }) {
   const [rating, setRating] = useState(0);
@@ -34,6 +35,7 @@ function Comments({ product }) {
     if (comment.trim() !== '') {
       // Call createComment function to create a new comment
       const newComment = await createComment(product?._id, comment, rating, email);
+      toast.success('Comment added');
 
       // Update the state with the new comment received from Sanity
       setComments([...comments, newComment]);

@@ -2,6 +2,7 @@
 import Image from 'next/image';
 import React,{useState} from 'react';
 import useCartStore from "../../cartStore"
+import { toast } from 'react-hot-toast';
 
 function Details({product}) {
   const [selectedImage, setSelectedImage] = useState(product?.image);
@@ -13,6 +14,7 @@ function Details({product}) {
 
   const handleAddToCart = () => {
     addToCart({ product, quantity: qty,color:selectedColor });
+    toast.success('Added to cart');
   };
 
   return (
