@@ -12,6 +12,8 @@ function Products() {
   const [sortBy, setSortBy] = useState('latest');
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage,setProductsPerPage] = useState(5);
+  const [searchQuery, setSearchQuery] = useState('');
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,7 +27,15 @@ function Products() {
     const filteredProducts = data.filter(product => {
       const price = parseFloat(product.price); // assuming price is a string
       const isMinPriceValid = !minPrice || price >= parseFloat(minPrice);
-      return isMinPriceValid;
+
+      const matchesSearchQuery =
+        !searchQuery ||
+        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        // Add additional checks based on other relevant attributes
+        // For example: product.description.toLowerCase().includes(searchQuery.toLowerCase())
+        false;
+
+      return isMinPriceValid && matchesSearchQuery;
     });
 
     const sortedProducts = [...filteredProducts].sort((a, b) => {
@@ -46,13 +56,14 @@ function Products() {
 
   useEffect(() => {
     applyFilters();
-  }, [minPrice, sortBy]);
+  }, [minPrice, sortBy, searchQuery]);
 
   const resetFilters = () => {
     setMinPrice('');
     setSortBy('latest');
     setCurrentPage(1);
     setProductsPerPage(5);
+    setSearchQuery('');
     fetchData();
   };
 
@@ -87,7 +98,19 @@ function Products() {
         <div className="mr-8">
           <h1 className="text-2xl font-semibold text-[#5B20B6] mb-4">Filters</h1>
           <div className="space-y-4">
-            {/* ... (your existing code) */}
+             {/* Search Input */}
+             <div className="space-y-2">
+              <h2 className="text-lg font-medium">Search</h2>
+              <div className="flex space-x-2">
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full px-2 py-1 border border-gray-300 rounded-md"
+                />
+              </div>
+            </div>
 
             {/* Price Range */}
             <div className="space-y-2">
@@ -174,6 +197,9 @@ function Products() {
            </>)
           }
       </p>
+
+            
+
         {/* Product Grid */}
         <div className='mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16'>
           {currentProducts?.map((product) => (
