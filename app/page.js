@@ -1,12 +1,29 @@
 import React from 'react'
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import Category from './components/Category';
 import Card from './components/Card';
 import Banner from './components/Banner';
+import { currentUser } from '@clerk/nextjs';
+import { getUserByEmail,createUser } from '@/sanity/user-util';
 
+export default async function Home() {
+  const user = await currentUser();
+ 
+  if (!user) return <div>Not logged in</div>;
 
-function Home() {
+  // Check if the user with the current email already exists in Sanity
+  const existingUser = await getUserByEmail(user?.emailAddresses[0]?.emailAddress);
+
+  // If the user with the email doesn't exist, create the user in Sanity
+  if (existingUser.length === 0) {
+    const newUserResult = await createUser({
+      name: user?.firstName,
+      email: user?.emailAddresses[0]?.emailAddress,
+      user:user
+    });
+  }
+
+  
   return (
     <div>
        <Header/>
@@ -42,4 +59,3 @@ function Home() {
   )
 }
 
-export default Home
