@@ -2,7 +2,8 @@
 import user from "./user-schema"
 import product from "./product-schema"
 import order from "./order-schema";
+import comment from "./comment-schema";
 
-const schemas = [user,product,order];
+const schemas = [user,product,order,comment];
 
 export default schemas;
