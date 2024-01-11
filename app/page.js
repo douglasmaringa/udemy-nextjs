@@ -4,25 +4,15 @@ import Footer from "./components/Footer";
 import Card from './components/Card';
 import Banner from './components/Banner';
 import { currentUser } from '@clerk/nextjs';
-import { getUserByEmail,createUser } from '@/sanity/user-util';
+import { getProducts } from '@/sanity/product-util';
 
 export default async function Home() {
   const user = await currentUser();
  
   if (!user) return <div>Not logged in</div>;
+  const email = user?.emailAddresses[0]?.emailAddress;
 
-  // Check if the user with the current email already exists in Sanity
-  const existingUser = await getUserByEmail(user?.emailAddresses[0]?.emailAddress);
-
-  // If the user with the email doesn't exist, create the user in Sanity
-  if (existingUser.length === 0) {
-    const newUserResult = await createUser({
-      name: user?.firstName,
-      email: user?.emailAddresses[0]?.emailAddress,
-      user:user
-    });
-  }
-
+  const products = await getProducts();
   
   return (
     <div>
@@ -44,12 +34,11 @@ export default async function Home() {
 
       <div className='flex p-10'>
       <div className='mx-auto grid grid-cols-1 lg:grid-cols-3 gap-16'>
-          <Card/>
-          <Card/>
-          <Card/>
-          <Card/>
-          <Card/>
-          <Card/>
+        {
+          products.map((product)=>(
+            <Card key={product._id} product={product}/>
+          ))
+        }
       </div>
       </div>
 
